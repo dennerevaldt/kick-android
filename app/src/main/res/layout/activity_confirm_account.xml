@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/colorPrimary"
+    tools:context="br.unisinos.kickoffapp.activities.ConfirmAccountActivity">
+
+    <ScrollView
+        android:id="@+id/confirm_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="CONFIRMAR CONTA"
+                android:textColor="#fff"
+                style="@android:style/TextAppearance.Large"/>
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                style="@android:style/TextAppearance.Medium" />
+
+            <TextView
+                android:text="Tipo de conta"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp" />
+
+            <Spinner
+                android:id="@+id/spinnerType"
+                android:spinnerMode="dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" />
+
+            <LinearLayout
+                android:id="@+id/form_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/KickTextTheme">
+
+                    <EditText
+                        android:id="@+id/username"
+                        android:textColor="#fff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Usuário"
+                        android:imeActionId="@+id/login_form"
+                        android:imeActionLabel="Usuário"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:drawableLeft="@mipmap/ic_account_circle_white_24dp"
+                        android:drawablePadding="10dp"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <!-- IF PLAYER -->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/positionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/KickTextTheme">
+
+                    <EditText
+                        android:id="@+id/position"
+                        android:textColor="#fff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Posição de jogo"
+                        android:imeActionId="@+id/login_form"
+                        android:imeActionLabel="Posição de jogo"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:drawableLeft="@mipmap/ic_directions_run_white_24dp"
+                        android:drawablePadding="10dp"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <!-- IF ENTERPRISE -->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/telephoneInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/KickTextTheme">
+
+                    <EditText
+                        android:id="@+id/telephone"
+                        android:textColor="#fff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Telefone"
+                        android:imeActionId="@+id/login_form"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="phone"
+                        android:maxLength="12"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:drawableLeft="@mipmap/ic_call_white_24dp"
+                        android:drawablePadding="10dp"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/KickTextTheme">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:textColor="@color/white"
+                        android:drawableLeft="@mipmap/ic_location_on_white_24dp"
+                        android:drawablePadding="10dp"
+                        android:hint="Pesquise sua cidade/estado" >
+
+                    </AutoCompleteTextView>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/confirm_account_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:padding="12dp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:text="@string/confirm_account"/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
