@@ -14,6 +14,11 @@ public class Court implements Serializable {
     private String category;
 
     /**
+     * constructor empty
+     */
+    public Court(){}
+
+    /**
      * constructor
      * @param idCourt
      * @param name

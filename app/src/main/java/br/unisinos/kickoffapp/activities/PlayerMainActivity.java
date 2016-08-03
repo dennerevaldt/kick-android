@@ -2,7 +2,6 @@ package br.unisinos.kickoffapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -32,19 +31,8 @@ public class PlayerMainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_main);
 
-        setTitle("KICK OFF");
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,6 +42,7 @@ public class PlayerMainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         /**
          * Set credentials player logged
@@ -66,7 +55,7 @@ public class PlayerMainActivity extends AppCompatActivity
         nameUserLogged.setText(player.getFullName());
         emailUserLogger.setText(player.geteMail());
         /* SNACK BAR */
-        View parentLayout = findViewById(R.id.fab);
+        View parentLayout = findViewById(R.id.toolbar);
         final Snackbar snackBar = Snackbar.make(parentLayout, "Fez login como "+player.geteMail(), Snackbar.LENGTH_LONG);
         snackBar.setAction("OK", new View.OnClickListener() {
             @Override
@@ -123,18 +112,20 @@ public class PlayerMainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-            FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
-            xfragmentTransaction.replace(R.id.containerView,new TabPlayerFragment()).commit();
-        } else if (id == R.id.nav_slideshow) {
+        if (id == R.id.nav_home) {
 
-        } else if (id == R.id.nav_manage) {
+            TabPlayerFragment tabPlayerFragment = new TabPlayerFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.containerView, tabPlayerFragment);
+            transaction.commit();
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_exit) {
 
-        } else if (id == R.id.nav_send) {
+            UserPreferences.clearUser(this);
+            Intent intent = new Intent(PlayerMainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
 
         }
 

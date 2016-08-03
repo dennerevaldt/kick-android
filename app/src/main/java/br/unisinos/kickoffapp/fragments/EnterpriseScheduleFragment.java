@@ -2,11 +2,9 @@ package br.unisinos.kickoffapp.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,15 +19,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import br.unisinos.kickoffapp.R;
-import br.unisinos.kickoffapp.activities.CreateCourtActivity;
 import br.unisinos.kickoffapp.activities.CreateScheduleActivity;
-import br.unisinos.kickoffapp.activities.EditCourtActivity;
 import br.unisinos.kickoffapp.activities.EditScheduleActivity;
 import br.unisinos.kickoffapp.adapters.SchedulesListAdapter;
-import br.unisinos.kickoffapp.asynk.scheduleTask.GetScheduleListHttp;
-import br.unisinos.kickoffapp.models.Court;
+import br.unisinos.kickoffapp.asynk.scheduleTask.GetScheduleListTask;
 import br.unisinos.kickoffapp.models.Schedule;
-import br.unisinos.kickoffapp.utils.ScheduleHttp;
 
 /**
  * Created by dennerevaldtmachado on 20/07/16.
@@ -39,6 +32,7 @@ public class EnterpriseScheduleFragment extends Fragment {
     private ListView listViewSchedules;
     private SchedulesListAdapter schedulesListAdapter;
     private SwipeRefreshLayout swipeContainer;
+    private List<Schedule> scheduleList;
 
     @Nullable
     @Override
@@ -102,11 +96,12 @@ public class EnterpriseScheduleFragment extends Fragment {
         }
     }
 
+
     private void getDataList() {
-        GetScheduleListHttp getScheduleListHttp = new GetScheduleListHttp(getContext());
-        List<Schedule> scheduleList = null;
+        GetScheduleListTask getScheduleListTask = new GetScheduleListTask(getContext());
+        scheduleList = new ArrayList<>();
         try {
-            scheduleList = getScheduleListHttp.execute().get();
+            scheduleList = getScheduleListTask.execute().get();
             setListViewSchedules(scheduleList);
             swipeContainer.setRefreshing(false);
         } catch (ExecutionException | InterruptedException ei) {

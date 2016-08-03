@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -20,10 +21,12 @@ import java.util.concurrent.ExecutionException;
 
 import br.unisinos.kickoffapp.R;
 import br.unisinos.kickoffapp.adapters.CourtsListAdapter;
-import br.unisinos.kickoffapp.asynk.courtTask.GetListCourtsHttp;
-import br.unisinos.kickoffapp.asynk.scheduleTask.RegisterScheduleHttp;
+import br.unisinos.kickoffapp.adapters.CourtsListSpinnerAdapter;
+import br.unisinos.kickoffapp.asynk.courtTask.GetListCourtsTask;
+import br.unisinos.kickoffapp.asynk.scheduleTask.RegisterScheduleTask;
 import br.unisinos.kickoffapp.models.Court;
 import br.unisinos.kickoffapp.models.Schedule;
+import br.unisinos.kickoffapp.utils.ConnectionUtil;
 
 public class CreateScheduleActivity extends AppCompatActivity {
     private int day;
@@ -32,7 +35,7 @@ public class CreateScheduleActivity extends AppCompatActivity {
     private EditText editTextDate;
     private EditText editTextHorary;
     private Spinner spinnerCategories;
-    private CourtsListAdapter dataAdapterTypes;
+    private CourtsListSpinnerAdapter dataAdapterTypes;
     private Court courtSelected;
 
     @Override
@@ -64,7 +67,7 @@ public class CreateScheduleActivity extends AppCompatActivity {
         editTextDate = (EditText) findViewById(R.id.editTextDate);
         Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        month = calendar.get(Calendar.MONTH);
+        month = calendar.get(Calendar.MONTH) + 1;
         year = calendar.get(Calendar.YEAR);
         editTextDate.setText(String.format("%02d/%02d/%02d", day, month, year));
 
@@ -140,15 +143,15 @@ public class CreateScheduleActivity extends AppCompatActivity {
     }
 
     private void getCategoriesList() {
-        GetListCourtsHttp getListCourtsHttp = new GetListCourtsHttp(CreateScheduleActivity.this, true);
+        GetListCourtsTask getListCourtsTask = new GetListCourtsTask(CreateScheduleActivity.this, true);
         List<Court> courtListReturn = null;
         try {
-            courtListReturn = getListCourtsHttp.execute().get();
+            courtListReturn = getListCourtsTask.execute().get();
         } catch (ExecutionException | InterruptedException ei) {
             ei.printStackTrace();
         }
 
-        dataAdapterTypes = new CourtsListAdapter(this, courtListReturn);
+        dataAdapterTypes = new CourtsListSpinnerAdapter(this, courtListReturn);
         spinnerCategories.setAdapter(dataAdapterTypes);
     }
 
@@ -167,8 +170,12 @@ public class CreateScheduleActivity extends AppCompatActivity {
                         courtSelected
                 );
 
-                RegisterScheduleHttp registerScheduleHttp = new RegisterScheduleHttp(CreateScheduleActivity.this);
-                registerScheduleHttp.execute(schedule);
+                if (ConnectionUtil.hasConnection(CreateScheduleActivity.this)) {
+                    RegisterScheduleTask registerScheduleTask = new RegisterScheduleTask(CreateScheduleActivity.this);
+                    registerScheduleTask.execute(schedule);
+                } else {
+                    Toast.makeText(CreateScheduleActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

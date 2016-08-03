@@ -22,7 +22,7 @@ import br.unisinos.kickoffapp.R;
 import br.unisinos.kickoffapp.activities.CreateCourtActivity;
 import br.unisinos.kickoffapp.activities.EditCourtActivity;
 import br.unisinos.kickoffapp.adapters.CourtsListAdapter;
-import br.unisinos.kickoffapp.asynk.courtTask.GetListCourtsHttp;
+import br.unisinos.kickoffapp.asynk.courtTask.GetListCourtsTask;
 import br.unisinos.kickoffapp.models.Court;
 
 /**
@@ -32,9 +32,6 @@ public class EnterpriseCourtFragment extends Fragment {
     private ListView listViewCourts;
     private CourtsListAdapter courtListAdapter;
     private SwipeRefreshLayout swipeContainer;
-
-    public EnterpriseCourtFragment() {
-    }
 
     @Nullable
     @Override
@@ -97,7 +94,7 @@ public class EnterpriseCourtFragment extends Fragment {
     }
 
     private void getDataList() {
-        GetListCourtsHttp getCategoriesHttp = new GetListCourtsHttp(getContext(), false);
+        GetListCourtsTask getCategoriesHttp = new GetListCourtsTask(getContext(), false);
         List<Court> courtListReturn = null;
         try {
             courtListReturn = getCategoriesHttp.execute().get();

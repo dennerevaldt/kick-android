@@ -19,7 +19,7 @@ import br.unisinos.kickoffapp.models.Enterprise;
  * Created by dennerevaldtmachado on 21/07/16.
  */
 public class CourtHttp {
-    public static final String COURT_URL_JSON = "/court";
+    private static final String COURT_URL_JSON = "/court";
 
     /**
      * Create new court
@@ -31,12 +31,10 @@ public class CourtHttp {
     public Court createCourt (Court court, Context context) throws Exception {
         String token = UserPreferences.getToken(context);
         HttpURLConnection httpURLConnection = ConnectionUtil.connect(COURT_URL_JSON, "POST", true, true, token);
-        Enterprise enterpriseLogin = UserPreferences.getUserEnteprise(context);
 
         StringBuilder sb = new StringBuilder();
         sb.append("name=" + court.getName());
         sb.append("&category=" + court.getCategory());
-        sb.append("&enterprise_id=" + enterpriseLogin.getIdEnterprise());
 
         OutputStream os = httpURLConnection.getOutputStream();
         os.write(sb.toString().getBytes());

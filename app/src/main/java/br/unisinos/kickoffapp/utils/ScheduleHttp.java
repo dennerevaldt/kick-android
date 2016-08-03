@@ -26,13 +26,11 @@ public class ScheduleHttp {
     public Schedule createSchedule (Schedule schedule, Context context) throws Exception {
         String token = UserPreferences.getToken(context);
         HttpURLConnection httpURLConnection = ConnectionUtil.connect(SCHEDULE_URL_JSON, "POST", true, true, token);
-        Enterprise enterpriseLogin = UserPreferences.getUserEnteprise(context);
 
         StringBuilder sb = new StringBuilder();
         sb.append("&horary=" + schedule.getHorary());
         sb.append("&date=" + schedule.getDateFormatMySql());
         sb.append("&court_id=" + schedule.getCourt().getIdCourt());
-        sb.append("&enterprise_id=" + enterpriseLogin.getIdEnterprise());
 
         OutputStream os = httpURLConnection.getOutputStream();
         os.write(sb.toString().getBytes());
@@ -100,6 +98,21 @@ public class ScheduleHttp {
     public static List<Schedule> getAllSchedules(Context context) throws Exception {
         String token = UserPreferences.getToken(context);
         HttpURLConnection httpURLConnection = ConnectionUtil.connect(SCHEDULE_URL_JSON, "GET", true, false, token);
+
+        int responseServer = httpURLConnection.getResponseCode();
+        if (responseServer == HttpURLConnection.HTTP_OK) {
+            InputStream inputStream = httpURLConnection.getInputStream();
+            JSONArray jsonAllSchedulesArray = new JSONArray(ConnectionUtil.bytesForString(inputStream));
+            List<Schedule> schedules = readScheduleArray(jsonAllSchedulesArray);
+            return schedules;
+        }
+        return new ArrayList<>();
+    }
+
+    public static List<Schedule> getAllByIdEnterprise(Context context, String idEnterprise) throws Exception {
+        String token = UserPreferences.getToken(context);
+        String urlID = "/enterprise/"+idEnterprise;
+        HttpURLConnection httpURLConnection = ConnectionUtil.connect(SCHEDULE_URL_JSON + urlID, "GET", true, false, token);
 
         int responseServer = httpURLConnection.getResponseCode();
         if (responseServer == HttpURLConnection.HTTP_OK) {

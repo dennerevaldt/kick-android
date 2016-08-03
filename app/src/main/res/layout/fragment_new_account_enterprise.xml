@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:textColor="@color/white"
-                    android:drawableLeft="@mipmap/ic_location_on_white_24dp"
+                    android:drawableLeft="@mipmap/ic_location_on_white_24dp_2"
                     android:drawablePadding="10dp"
                     android:hint="Pesquise sua cidade/estado"
                     android:singleLine="true"

@@ -47,6 +47,12 @@ public class AuthHttp {
             } else {
                 return false;
             }
+        } else  if(responseServer == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            throw new Exception("401");
+        } else if (responseServer == HttpURLConnection.HTTP_NOT_FOUND) {
+            throw new Exception("404");
+        } else  if(responseServer == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+            throw new Exception("500");
         }
         return false;
     }
@@ -82,6 +88,8 @@ public class AuthHttp {
             throw new Exception("401");
         } else if (responseServer == HttpURLConnection.HTTP_NOT_FOUND) {
             throw new Exception("404");
+        } else  if(responseServer == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+            throw new Exception("500");
         }
         return false;
     }

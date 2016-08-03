@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -48,14 +49,21 @@ public class SchedulesListAdapter extends BaseAdapter {
             TextView date = (TextView) convertView.findViewById(R.id.date);
             TextView horary = (TextView) convertView.findViewById(R.id.horary);
             TextView nameCourt = (TextView) convertView.findViewById(R.id.nameCourt);
-            TextView categoryCourt = (TextView) convertView.findViewById(R.id.categoryCourt);
-
+            ImageView icon = (ImageView) convertView.findViewById(R.id.ivIconPic);
 
             Schedule schedule = scheduleList.get(position);
-            date.setText(schedule.getDateFormat());
-            horary.setText(schedule.getHoraryFormat());
-            nameCourt.setText(schedule.getCourt().getName());
-            categoryCourt.setText(schedule.getCourt().getCategory());
+
+            if (schedule!=null){
+                date.setText(schedule.getDateFormat());
+                horary.setText(schedule.getHoraryFormat());
+                nameCourt.setText(schedule.getCourt().getName());
+
+                if (schedule.getCourt().getCategory().equals("Futebol society (7)")) {
+                    icon.setImageResource(R.drawable.icon_society);
+                } else {
+                    icon.setImageResource(R.drawable.icon_futsal);
+                }
+            }
         }
 
         return convertView;

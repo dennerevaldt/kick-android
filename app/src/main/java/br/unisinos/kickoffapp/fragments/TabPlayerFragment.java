@@ -47,6 +47,10 @@ public class TabPlayerFragment extends Fragment {
                 tabLayout.getTabAt(0).setIcon(R.mipmap.ic_directions_run_white_24dp);
                 tabLayout.getTabAt(1).setIcon(R.mipmap.ic_location_on_white_24dp);
                 tabLayout.getTabAt(2).setIcon(R.mipmap.ic_notifications_white_24dp);
+                /**
+                 * Set title initial
+                 */
+                getActivity().setTitle("Meus jogos");
 
                 tabLayout.getTabAt(0).getIcon().setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                 tabLayout.getTabAt(1).getIcon().setColorFilter(ContextCompat.getColor(getContext(), R.color.iron), PorterDuff.Mode.SRC_IN);
@@ -57,6 +61,18 @@ public class TabPlayerFragment extends Fragment {
                     public void onTabSelected(TabLayout.Tab tab) {
                         viewPager.setCurrentItem(tab.getPosition());
                         tab.getIcon().setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+
+                        switch (tab.getPosition()){
+                            case 0:
+                                getActivity().setTitle("Meus jogos");
+                                break;
+                            case 1:
+                                getActivity().setTitle("Jogos próximos");
+                                break;
+                            case 2:
+                                getActivity().setTitle("Notificações");
+                                break;
+                        }
                     }
 
                     @Override

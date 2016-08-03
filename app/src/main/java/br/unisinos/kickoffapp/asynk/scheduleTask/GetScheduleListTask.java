@@ -12,11 +12,11 @@ import br.unisinos.kickoffapp.utils.ScheduleHttp;
 /**
  * Created by dennerevaldtmachado on 26/07/16.
  */
-public class GetScheduleListHttp extends AsyncTask<String, List<Schedule>, List<Schedule>> {
+public class GetScheduleListTask extends AsyncTask<String, List<Schedule>, List<Schedule>> {
     private Context context;
     private Exception exception;
 
-    public GetScheduleListHttp(Context contextActive) {
+    public GetScheduleListTask(Context contextActive) {
         this.context = contextActive;
     }
 

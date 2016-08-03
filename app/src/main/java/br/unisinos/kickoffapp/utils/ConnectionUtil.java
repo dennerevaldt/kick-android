@@ -14,6 +14,7 @@ import java.net.URL;
  * Created by dennerevaldtmachado on 28/06/16.
  */
 public class ConnectionUtil {
+    //private static final String URL_BASE = "https://kickapi.herokuapp.com";
     private static final String URL_BASE = "http://10.0.2.2:3000";
     //private static final String URL_BASE = "http://192.168.1.6:3000";
 

@@ -18,22 +18,24 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import br.unisinos.kickoffapp.R;
-import br.unisinos.kickoffapp.adapters.CourtsListAdapter;
-import br.unisinos.kickoffapp.asynk.courtTask.GetListCourtsHttp;
-import br.unisinos.kickoffapp.asynk.scheduleTask.DeleteScheduleHttp;
-import br.unisinos.kickoffapp.asynk.scheduleTask.EditScheduleHttp;
+import br.unisinos.kickoffapp.adapters.CourtsListSpinnerAdapter;
+import br.unisinos.kickoffapp.asynk.courtTask.GetListCourtsTask;
+import br.unisinos.kickoffapp.asynk.scheduleTask.DeleteScheduleTask;
+import br.unisinos.kickoffapp.asynk.scheduleTask.EditScheduleTask;
 import br.unisinos.kickoffapp.models.Court;
 import br.unisinos.kickoffapp.models.Schedule;
+import br.unisinos.kickoffapp.utils.ConnectionUtil;
 
 public class EditScheduleActivity extends AppCompatActivity {
     private Schedule schedule;
     private Spinner spinnerCategories;
-    private CourtsListAdapter dataAdapterTypes;
+    private CourtsListSpinnerAdapter dataAdapterTypes;
     private Court courtSelected;
     private EditText editTextDate;
     private EditText editTextHorary;
@@ -83,8 +85,8 @@ public class EditScheduleActivity extends AppCompatActivity {
                 .setMessage("Você deseja realmente excluir este horário?")
                 .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        DeleteScheduleHttp deleteScheduleHttp = new DeleteScheduleHttp(EditScheduleActivity.this);
-                        deleteScheduleHttp.execute(schedule);
+                        DeleteScheduleTask deleteScheduleTask = new DeleteScheduleTask(EditScheduleActivity.this);
+                        deleteScheduleTask.execute(schedule);
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -115,15 +117,15 @@ public class EditScheduleActivity extends AppCompatActivity {
     }
 
     private void getCategoriesList() {
-        GetListCourtsHttp getListCourtsHttp = new GetListCourtsHttp(EditScheduleActivity.this, true);
+        GetListCourtsTask getListCourtsTask = new GetListCourtsTask(EditScheduleActivity.this, true);
         List<Court> courtListReturn = null;
         try {
-            courtListReturn = getListCourtsHttp.execute().get();
+            courtListReturn = getListCourtsTask.execute().get();
         } catch (ExecutionException | InterruptedException ei) {
             ei.printStackTrace();
         }
 
-        dataAdapterTypes = new CourtsListAdapter(this, courtListReturn);
+        dataAdapterTypes = new CourtsListSpinnerAdapter(this, courtListReturn);
         spinnerCategories.setAdapter(dataAdapterTypes);
 
         for (int i = 0;  i < courtListReturn.size(); i++) {
@@ -197,8 +199,13 @@ public class EditScheduleActivity extends AppCompatActivity {
                 String date = editTextDate.getText().toString();
 
                 Schedule scheduleEdit = new Schedule(schedule.getIdSchedule(), hour, date, courtSelected);
-                EditScheduleHttp editScheduleHttp = new EditScheduleHttp(EditScheduleActivity.this);
-                editScheduleHttp.execute(scheduleEdit);
+
+                if (ConnectionUtil.hasConnection(EditScheduleActivity.this)) {
+                    EditScheduleTask editScheduleTask = new EditScheduleTask(EditScheduleActivity.this);
+                    editScheduleTask.execute(scheduleEdit);
+                } else {
+                    Toast.makeText(EditScheduleActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

@@ -29,6 +29,7 @@ import java.util.Arrays;
 
 import br.unisinos.kickoffapp.R;
 import br.unisinos.kickoffapp.utils.AuthHttp;
+import br.unisinos.kickoffapp.utils.ConnectionUtil;
 import br.unisinos.kickoffapp.utils.UserPreferences;
 
 public class LoginActivity extends AppCompatActivity {
@@ -97,8 +98,12 @@ public class LoginActivity extends AppCompatActivity {
 
                         String[] parameters = {sb.toString()};
 
-                        loginRequestHttp = new LoginRequestHttp();
-                        loginRequestHttp.execute(parameters);
+                        if (ConnectionUtil.hasConnection(LoginActivity.this)) {
+                            loginRequestHttp = new LoginRequestHttp();
+                            loginRequestHttp.execute(parameters);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             });
@@ -210,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 return AuthHttp.login(getApplicationContext(), params[0]);
             } catch (Exception e) {
-                e.printStackTrace();
+                exception = e;
             }
             return false;
         }
@@ -222,10 +227,12 @@ public class LoginActivity extends AppCompatActivity {
             if (exception != null) {
                 if (exception.getMessage() == "401") {
                     Toast.makeText(LoginActivity.this, "Usuário ou senha incorretos", Toast.LENGTH_LONG).show();
-                }
-
-                if (exception.getMessage() == "404") {
+                } else if (exception.getMessage() == "404") {
                     Toast.makeText(LoginActivity.this, "Usuário ou senha não cadastrados", Toast.LENGTH_LONG).show();
+                } else if (exception.getMessage() == "500") {
+                    Toast.makeText(LoginActivity.this, "Ops, estamos com problemas... Tente mais tarde", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Falha na conexão, verifique sua rede", Toast.LENGTH_LONG).show();
                 }
             } else if(login) {
                 onLoginSuccess();
@@ -272,8 +279,10 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("emailFb", emailFb);
                     intent.putExtra("idUserFb", idUserFb);
                     startActivity(intent);
+                } else if (exception.getMessage() == "500") {
+                    Toast.makeText(LoginActivity.this, "Ops, estamos com problemas... Tente mais tarde", Toast.LENGTH_LONG).show();
                 } else {
-                    onExceptionLogin();
+                    Toast.makeText(LoginActivity.this, "Falha na conexão, verifique sua rede", Toast.LENGTH_LONG).show();
                 }
             } else {
                 onLoginSuccess();
@@ -284,10 +293,6 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Feedbacks login
      */
-    private void onExceptionLogin() {
-        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-    }
-
     private void onLoginSuccess() {
         int typeUser = UserPreferences.getTypeUser(getApplicationContext());
         if (typeUser != -1) {

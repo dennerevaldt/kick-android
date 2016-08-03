@@ -104,26 +104,56 @@ public class ConfirmAccountActivity extends AppCompatActivity {
                     if (ConnectionUtil.hasConnection(ConfirmAccountActivity.this)) {
                         StringBuilder sb = new StringBuilder();
                         String[] parameters;
+                        String username = editTextUsername.getText().toString();
+                        String district = autocompleteView.getText().toString();
+
+                        if (username.equals("")){
+                            editTextUsername.setError("Campo obrigatório");
+                            return;
+                        }
 
                         sb.append("fullname=" + nameFb);
-                        sb.append("&username=" + editTextUsername.getText());
+                        sb.append("&username=" + username);
                         sb.append("&password=" + idUserFb);
                         sb.append("&email=" + emailFb);
-                        sb.append("&district=" + autocompleteView.getText());
-                        sb.append("&lat=" + latLng.latitude);
-                        sb.append("&lng=" + latLng.longitude);
 
-                        if (spinnerTypes.getSelectedItem().toString() == "Jogador") {
+                        if (spinnerTypes.getSelectedItem().toString().equals("Jogador")) {
 
-                            sb.append("&position=" + editTextPosition.getText());
+                            String position = editTextPosition.getText().toString();
+
+                            if (position.equals("")) {
+                                editTextPosition.setError("Campo obrigatório");
+                                return;
+                            } else if (district.equals("")){
+                                autocompleteView.setError("Campo obrigatório");
+                                return;
+                            }
+
+                            sb.append("&position=" + position);
+                            sb.append("&district=" + district);
+                            sb.append("&lat=" + latLng.latitude);
+                            sb.append("&lng=" + latLng.longitude);
                             parameters = new String[]{sb.toString()};
 
                             mRegisterPlayerTask = new RegisterPlayerHttp();
                             mRegisterPlayerTask.execute(parameters);
 
-                        } else if (spinnerTypes.getSelectedItem().toString() == "Empresa") {
+                        } else if (spinnerTypes.getSelectedItem().toString().equals("Empresa")) {
 
-                            sb.append("&telephone=" + editTextTelephone.getText());
+                            String telephone = editTextTelephone.getText().toString();
+
+                            if (telephone.equals("")) {
+                                editTextTelephone.setError("Campo obrigatório");
+                                return;
+                            } else if (district.equals("")){
+                                autocompleteView.setError("Campo obrigatório");
+                                return;
+                            }
+
+                            sb.append("&telephone=" + telephone);
+                            sb.append("&district=" + district);
+                            sb.append("&lat=" + latLng.latitude);
+                            sb.append("&lng=" + latLng.longitude);
                             parameters = new String[]{sb.toString()};
 
                             mRegisterEnterpriseTask = new RegisterEnterpriseHttp();

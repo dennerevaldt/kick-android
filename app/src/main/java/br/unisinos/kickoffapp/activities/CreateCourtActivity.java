@@ -8,13 +8,15 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.unisinos.kickoffapp.R;
-import br.unisinos.kickoffapp.asynk.courtTask.RegisterCourtHttp;
+import br.unisinos.kickoffapp.asynk.courtTask.RegisterCourtTask;
 import br.unisinos.kickoffapp.models.Court;
+import br.unisinos.kickoffapp.utils.ConnectionUtil;
 
 public class CreateCourtActivity extends AppCompatActivity {
     private Spinner spinnerCategories;
@@ -68,9 +70,18 @@ public class CreateCourtActivity extends AppCompatActivity {
                 String name = editTextName.getText().toString();
                 String category = spinnerCategories.getSelectedItem().toString();
 
-                Court court = new Court("", name, category);
-                RegisterCourtHttp registerCourtHttp = new RegisterCourtHttp(CreateCourtActivity.this);
-                registerCourtHttp.execute(court);
+                if (name.equals("")){
+                    editTextName.setError("Campo obrigatório");
+                    return;
+                } else {
+                    Court court = new Court("", name, category);
+                    if (ConnectionUtil.hasConnection(CreateCourtActivity.this)) {
+                        RegisterCourtTask registerCourtTask = new RegisterCourtTask(CreateCourtActivity.this);
+                        registerCourtTask.execute(court);
+                    } else {
+                        Toast.makeText(CreateCourtActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
     }

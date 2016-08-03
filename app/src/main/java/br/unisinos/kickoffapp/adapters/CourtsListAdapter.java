@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.unisinos.kickoffapp.R;
@@ -47,11 +49,16 @@ public class CourtsListAdapter extends BaseAdapter {
 
         if (convertView != null){
             TextView name = (TextView) convertView.findViewById(R.id.name);
-            TextView category = (TextView) convertView.findViewById(R.id.category);
+            ImageView icon = (ImageView) convertView.findViewById(R.id.ivIconPic);
 
             Court court = courtList.get(position);
             name.setText(court.getName());
-            category.setText(court.getCategory());
+
+            if (court.getCategory().equals("Futebol society (7)")) {
+                icon.setImageResource(R.drawable.icon_society);
+            } else {
+                icon.setImageResource(R.drawable.icon_futsal);
+            }
         }
 
         return convertView;

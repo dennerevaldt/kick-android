@@ -1,4 +1,4 @@
-package br.unisinos.kickoffapp.asynk.scheduleTask;
+package br.unisinos.kickoffapp.asynk.courtTask;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,19 +8,19 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import br.unisinos.kickoffapp.R;
-import br.unisinos.kickoffapp.models.Schedule;
-import br.unisinos.kickoffapp.utils.ScheduleHttp;
+import br.unisinos.kickoffapp.models.Court;
+import br.unisinos.kickoffapp.utils.CourtHttp;
 
 /**
  * Created by dennerevaldtmachado on 26/07/16.
  */
-public class DeleteScheduleHttp extends AsyncTask<Schedule, Void, Boolean> {
+public class DeleteCourtTask extends AsyncTask<Court, Void, Boolean> {
     private ProgressDialog progressDialog;
     private Context context;
     private Exception exception;
 
-    public DeleteScheduleHttp(Context contextActive) {
-        this.context = contextActive;
+    public DeleteCourtTask(Context context) {
+        this.context = context;
         progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
         progressDialog.setMessage("Excluindo...");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -33,10 +33,10 @@ public class DeleteScheduleHttp extends AsyncTask<Schedule, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Schedule... params) {
+    protected Boolean doInBackground(Court... params) {
         try {
-            ScheduleHttp scheduleHttp = new ScheduleHttp();
-            return scheduleHttp.deleteSchedule(params[0], context);
+            CourtHttp courtHttp = new CourtHttp();
+            return courtHttp.deleteCourt(params[0], context);
         } catch (Exception e){
             exception = e;
         }
@@ -48,7 +48,7 @@ public class DeleteScheduleHttp extends AsyncTask<Schedule, Void, Boolean> {
         super.onPostExecute(deleted);
         progressDialog.dismiss();
         if (deleted) {
-            onRequestSuccessOperation("Horário excluído com sucesso");
+            onRequestSuccessOperation("Quadra excluída com sucesso");
         } else {
             onRequestFailed(exception.getMessage());
         }

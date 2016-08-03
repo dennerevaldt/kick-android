@@ -1,4 +1,4 @@
-package br.unisinos.kickoffapp.asynk.scheduleTask;
+package br.unisinos.kickoffapp.asynk.courtTask;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,18 +8,18 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import br.unisinos.kickoffapp.R;
-import br.unisinos.kickoffapp.models.Schedule;
-import br.unisinos.kickoffapp.utils.ScheduleHttp;
+import br.unisinos.kickoffapp.models.Court;
+import br.unisinos.kickoffapp.utils.CourtHttp;
 
 /**
  * Created by dennerevaldtmachado on 26/07/16.
  */
-public class EditScheduleHttp extends AsyncTask<Schedule, Void, Schedule> {
+public class EditCourtTask extends AsyncTask<Court, Void, Court> {
     private ProgressDialog progressDialog;
     private Context context;
     private Exception exception;
 
-    public EditScheduleHttp(Context contextActive) {
+    public EditCourtTask(Context contextActive) {
         this.context = contextActive;
         progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
         progressDialog.setMessage("Editando...");
@@ -33,10 +33,10 @@ public class EditScheduleHttp extends AsyncTask<Schedule, Void, Schedule> {
     }
 
     @Override
-    protected Schedule doInBackground(Schedule... params) {
+    protected Court doInBackground(Court... params) {
         try {
-            ScheduleHttp scheduleHttp = new ScheduleHttp();
-            return scheduleHttp.updateSchedule(params[0], context);
+            CourtHttp courtHttp = new CourtHttp();
+            return courtHttp.updateCourt(params[0], context);
         } catch (Exception e){
             exception = e;
         }
@@ -44,11 +44,11 @@ public class EditScheduleHttp extends AsyncTask<Schedule, Void, Schedule> {
     }
 
     @Override
-    protected void onPostExecute(Schedule schedule) {
-        super.onPostExecute(schedule);
+    protected void onPostExecute(Court court) {
+        super.onPostExecute(court);
         progressDialog.dismiss();
-        if (schedule != null) {
-            onRequestSuccessOperation("Horário editado com sucesso");
+        if (court != null) {
+            onRequestSuccessOperation("Quadra editada com sucesso");
         } else {
             onRequestFailed(exception.getMessage());
         }

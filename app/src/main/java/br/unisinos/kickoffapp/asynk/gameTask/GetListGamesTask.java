@@ -1,4 +1,4 @@
-package br.unisinos.kickoffapp.asynk.courtTask;
+package br.unisinos.kickoffapp.asynk.gameTask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,18 +9,20 @@ import java.util.List;
 
 import br.unisinos.kickoffapp.R;
 import br.unisinos.kickoffapp.models.Court;
+import br.unisinos.kickoffapp.models.Game;
 import br.unisinos.kickoffapp.utils.CourtHttp;
+import br.unisinos.kickoffapp.utils.GameHttp;
 
 /**
- * Created by dennerevaldtmachado on 26/07/16.
+ * Created by dennerevaldtmachado on 28/07/16.
  */
-public class GetListCourtsHttp extends AsyncTask<Void, List<Court>, List<Court>> {
+public class GetListGamesTask extends AsyncTask<Void, List<Game>, List<Game>> {
     private ProgressDialog progressDialog;
     private Context context;
     private Exception exception;
     private Boolean showProgress;
 
-    public GetListCourtsHttp(Context contextActive, Boolean showProgress) {
+    public GetListGamesTask(Context contextActive, Boolean showProgress) {
         this.context = contextActive;
         this.showProgress = showProgress;
         progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
@@ -36,9 +38,9 @@ public class GetListCourtsHttp extends AsyncTask<Void, List<Court>, List<Court>>
     }
 
     @Override
-    protected List<Court> doInBackground(Void... params) {
+    protected List<Game> doInBackground(Void... params) {
         try {
-            return CourtHttp.getAllCourts(context);
+            return GameHttp.getAllGames(context);
         } catch (Exception e) {
             exception = e;
         }
@@ -46,8 +48,8 @@ public class GetListCourtsHttp extends AsyncTask<Void, List<Court>, List<Court>>
     }
 
     @Override
-    protected void onPostExecute(List<Court> courtListReturn) {
-        super.onPostExecute(courtListReturn);
+    protected void onPostExecute(List<Game> gameListReturn) {
+        super.onPostExecute(gameListReturn);
         if (showProgress)
             progressDialog.dismiss();
 

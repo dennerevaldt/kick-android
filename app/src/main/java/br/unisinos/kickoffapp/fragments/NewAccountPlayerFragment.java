@@ -53,6 +53,7 @@ public class NewAccountPlayerFragment extends Fragment {
         editTextPassword = (EditText) view.findViewById(R.id.password);
         editTextEmail = (EditText) view.findViewById(R.id.email);
         editTextPosition = (EditText) view.findViewById(R.id.position);
+
         autocompleteView = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView);
         autocompleteView.setAdapter(new PlacesAutoCompleteAdapter(getActivity()));
         autocompleteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

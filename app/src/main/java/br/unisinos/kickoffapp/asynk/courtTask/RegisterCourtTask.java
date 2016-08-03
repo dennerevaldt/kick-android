@@ -14,12 +14,12 @@ import br.unisinos.kickoffapp.utils.CourtHttp;
 /**
  * Created by dennerevaldtmachado on 26/07/16.
  */
-public class RegisterCourtHttp extends AsyncTask<Court, Void, Court> {
+public class RegisterCourtTask extends AsyncTask<Court, Void, Court> {
     private ProgressDialog progressDialog;
     private Context context;
     private Exception exception;
 
-    public RegisterCourtHttp(Context contextActive) {
+    public RegisterCourtTask(Context contextActive) {
         this.context = contextActive;
         progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
         progressDialog.setMessage("Cadastrando...");

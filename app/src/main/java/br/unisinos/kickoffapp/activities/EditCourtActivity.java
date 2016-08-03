@@ -13,14 +13,16 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.unisinos.kickoffapp.R;
-import br.unisinos.kickoffapp.asynk.courtTask.DeleteCourtHttp;
-import br.unisinos.kickoffapp.asynk.courtTask.EditCourtHttp;
+import br.unisinos.kickoffapp.asynk.courtTask.DeleteCourtTask;
+import br.unisinos.kickoffapp.asynk.courtTask.EditCourtTask;
 import br.unisinos.kickoffapp.models.Court;
+import br.unisinos.kickoffapp.utils.ConnectionUtil;
 
 public class EditCourtActivity extends AppCompatActivity {
     private Court court;
@@ -71,8 +73,8 @@ public class EditCourtActivity extends AppCompatActivity {
             .setMessage("Você deseja realmente excluir esta quadra?")
             .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    DeleteCourtHttp deleteCourtHttp = new DeleteCourtHttp(EditCourtActivity.this);
-                    deleteCourtHttp.execute(court);
+                    DeleteCourtTask deleteCourtTask = new DeleteCourtTask(EditCourtActivity.this);
+                    deleteCourtTask.execute(court);
                 }
             })
             .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -121,8 +123,18 @@ public class EditCourtActivity extends AppCompatActivity {
                 String category = spinnerCategories.getSelectedItem().toString();
 
                 Court courtEdit = new Court(court.getIdCourt(), name, category);
-                EditCourtHttp editCourtHttp = new EditCourtHttp(EditCourtActivity.this);
-                editCourtHttp.execute(courtEdit);
+
+                if (name.equals("")){
+                    editTextName.setError("Campo obrigatório");
+                    return;
+                } else {
+                    if (ConnectionUtil.hasConnection(EditCourtActivity.this)) {
+                        EditCourtTask editCourtTask = new EditCourtTask(EditCourtActivity.this);
+                        editCourtTask.execute(courtEdit);
+                    } else {
+                        Toast.makeText(EditCourtActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
     }

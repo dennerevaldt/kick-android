@@ -16,7 +16,7 @@ import br.unisinos.kickoffapp.models.Player;
  * Created by dennerevaldtmachado on 28/06/16.
  */
 public class PlayerHttp {
-    public static final String PLAYER_URL_JSON = "/player";
+    private static final String PLAYER_URL_JSON = "/player";
 
     /**
      * Create new player
@@ -67,7 +67,7 @@ public class PlayerHttp {
      * @return List Player
      * @throws JSONException
      */
-    private static List<Player> readPlayersArray (JSONArray jsonPlayersArray) throws JSONException {
+    public static List<Player> readPlayersArray (JSONArray jsonPlayersArray) throws JSONException {
         List<Player> playerList = new ArrayList<>();
 
         for (int i = 0; i < jsonPlayersArray.length(); i++){
