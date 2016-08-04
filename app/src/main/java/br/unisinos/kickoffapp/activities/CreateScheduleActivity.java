@@ -85,11 +85,11 @@ public class CreateScheduleActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
-                editTextDate.setText(String.format("%02d/%02d/%02d", dayOfMonth, monthOfYear, year));
+                editTextDate.setText(String.format("%02d/%02d/%02d", dayOfMonth, monthOfYear+1, year));
             }
         };
 
-        DatePickerDialog dpDialog = new DatePickerDialog(this, listener, year, month, day);
+        DatePickerDialog dpDialog = new DatePickerDialog(this, listener, year, month-1, day);
         dpDialog.show();
     }
 
@@ -157,27 +157,29 @@ public class CreateScheduleActivity extends AppCompatActivity {
 
     private void initButtonSubmit() {
         AppCompatButton createButton = (AppCompatButton) findViewById(R.id.createButton);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String date = editTextDate.getText().toString();
-                String horary = editTextHorary.getText().toString();
+        if (createButton != null) {
+            createButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String date = editTextDate.getText().toString();
+                    String horary = editTextHorary.getText().toString();
 
-                Schedule schedule = new Schedule(
-                        "",
-                        horary,
-                        date,
-                        courtSelected
-                );
+                    Schedule schedule = new Schedule(
+                            "",
+                            horary,
+                            date,
+                            courtSelected
+                    );
 
-                if (ConnectionUtil.hasConnection(CreateScheduleActivity.this)) {
-                    RegisterScheduleTask registerScheduleTask = new RegisterScheduleTask(CreateScheduleActivity.this);
-                    registerScheduleTask.execute(schedule);
-                } else {
-                    Toast.makeText(CreateScheduleActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                    if (ConnectionUtil.hasConnection(CreateScheduleActivity.this)) {
+                        RegisterScheduleTask registerScheduleTask = new RegisterScheduleTask(CreateScheduleActivity.this);
+                        registerScheduleTask.execute(schedule);
+                    } else {
+                        Toast.makeText(CreateScheduleActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 }

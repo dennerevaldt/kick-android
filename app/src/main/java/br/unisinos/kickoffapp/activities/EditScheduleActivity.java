@@ -153,7 +153,7 @@ public class EditScheduleActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
-                editTextDate.setText(String.format("%02d/%02d/%02d", dayOfMonth, monthOfYear, year));
+                editTextDate.setText(String.format("%02d/%02d/%02d", dayOfMonth, monthOfYear+1, year));
             }
         };
 
@@ -161,7 +161,7 @@ public class EditScheduleActivity extends AppCompatActivity {
         int month = schedule.getMonth();
         int year = schedule.getYear();
 
-        DatePickerDialog dpDialog = new DatePickerDialog(this, listener, year, month, day);
+        DatePickerDialog dpDialog = new DatePickerDialog(this, listener, year, month-1, day);
         dpDialog.show();
     }
 
@@ -192,21 +192,23 @@ public class EditScheduleActivity extends AppCompatActivity {
 
     private void initButtonSubmit() {
         AppCompatButton btnSubmit = (AppCompatButton) findViewById(R.id.saveButton);
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String hour = editTextHorary.getText().toString();
-                String date = editTextDate.getText().toString();
+        if (btnSubmit != null) {
+            btnSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String hour = editTextHorary.getText().toString();
+                    String date = editTextDate.getText().toString();
 
-                Schedule scheduleEdit = new Schedule(schedule.getIdSchedule(), hour, date, courtSelected);
+                    Schedule scheduleEdit = new Schedule(schedule.getIdSchedule(), hour, date, courtSelected);
 
-                if (ConnectionUtil.hasConnection(EditScheduleActivity.this)) {
-                    EditScheduleTask editScheduleTask = new EditScheduleTask(EditScheduleActivity.this);
-                    editScheduleTask.execute(scheduleEdit);
-                } else {
-                    Toast.makeText(EditScheduleActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                    if (ConnectionUtil.hasConnection(EditScheduleActivity.this)) {
+                        EditScheduleTask editScheduleTask = new EditScheduleTask(EditScheduleActivity.this);
+                        editScheduleTask.execute(scheduleEdit);
+                    } else {
+                        Toast.makeText(EditScheduleActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }
