@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +67,7 @@ public class NewAccountEnterpriseFragment extends Fragment {
                 Place place = (Place) parent.getItemAtPosition(position);
                 // Set com a descrição do lugar o auto complete
                 autocompleteView.setText(place.getDescription());
+                autocompleteView.clearFocus();
                 // Busca lat e lng pelo id do local escolhido
                 PlaceAPI placeApi = new PlaceAPI();
                 latLng = placeApi.getLatLongLocale(place.getIdPlace());
@@ -75,28 +78,36 @@ public class NewAccountEnterpriseFragment extends Fragment {
         btnRegisterEnterprise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (ConnectionUtil.hasConnection(getContext())) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("fullname=" + editTextFullname.getText());
-                    sb.append("&username=" + editTextUsername.getText());
-                    sb.append("&password=" + editTextPassword.getText());
-                    sb.append("&email=" + editTextEmail.getText());
-                    sb.append("&district=" + autocompleteView.getText() );
-                    sb.append("&lat=" + latLng.latitude);
-                    sb.append("&lng=" + latLng.longitude);
-                    sb.append("&telephone=" + editTextTelephone.getText());
+                    if (checkInputs()) {
+                        if (latLng != null) {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("fullname=" + editTextFullname.getText());
+                            sb.append("&username=" + editTextUsername.getText());
+                            sb.append("&password=" + editTextPassword.getText());
+                            sb.append("&email=" + editTextEmail.getText());
+                            sb.append("&district=" + autocompleteView.getText());
+                            sb.append("&lat=" + latLng.latitude);
+                            sb.append("&lng=" + latLng.longitude);
+                            sb.append("&telephone=" + editTextTelephone.getText());
 
-                    String[] parameters = {sb.toString()};
+                            String[] parameters = {sb.toString()};
 
-                    mRegisterEnterpriseTask = new RegisterEnterpriseHttp();
-                    mRegisterEnterpriseTask.execute(parameters);
+                            mRegisterEnterpriseTask = new RegisterEnterpriseHttp();
+                            mRegisterEnterpriseTask.execute(parameters);
+                        } else {
+                            autocompleteView.setError("Localidade inválida, pesquise e selecione uma válida");
+                        }
+                    }
+
                 } else {
                     Toast.makeText(getContext(), "Sem conexão", Toast.LENGTH_LONG).show();
                 }
 
             }
         });
+
+        checkLat();
 
         return view;
     }
@@ -115,6 +126,60 @@ public class NewAccountEnterpriseFragment extends Fragment {
         editTextEmail.clearFocus();
         autocompleteView.clearFocus();
         editTextTelephone.clearFocus();
+    }
+
+    private void checkLat() {
+        autocompleteView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                latLng = null;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private Boolean checkInputs() {
+        String fullname = editTextFullname.getText().toString();
+        String username = editTextUsername.getText().toString();
+        String password = editTextPassword.getText().toString();
+        String email = editTextEmail.getText().toString();
+        String telephone = editTextTelephone.getText().toString();
+
+        if (fullname.equals("")){
+            editTextFullname.setError("Campo obrigatório");
+            return false;
+        }
+
+        if (username.equals("")){
+            editTextUsername.setError("Campo obrigatório");
+            return false;
+        }
+
+        if (password.equals("")){
+            editTextPassword.setError("Campo obrigatório");
+            return false;
+        }
+
+        if (email.equals("")){
+            editTextEmail.setError("Campo obrigatório");
+            return false;
+        }
+
+        if (telephone.equals("")){
+            editTextTelephone.setError("Campo obrigatório");
+            return false;
+        }
+
+        return true;
     }
 
     class RegisterEnterpriseHttp extends AsyncTask<String, Void, Enterprise> {

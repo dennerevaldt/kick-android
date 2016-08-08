@@ -78,7 +78,9 @@ public class CreateGameActivity extends AppCompatActivity implements
         initGoogleApiClient();
 
         editTextEnterprise = (EditText) findViewById(R.id.enterprise);
-        editTextEnterprise.setInputType(InputType.TYPE_NULL);
+        if (editTextEnterprise != null) {
+            editTextEnterprise.setInputType(InputType.TYPE_NULL);
+        }
         editTextEnterprise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,10 +89,14 @@ public class CreateGameActivity extends AppCompatActivity implements
         });
 
         txtViewCourtSchedule = (TextView) findViewById(R.id.txtViewCourtSchedule);
-        txtViewCourtSchedule.setVisibility(View.GONE);
+        if (txtViewCourtSchedule != null) {
+            txtViewCourtSchedule.setVisibility(View.GONE);
+        }
 
         spinnerSchedules = (Spinner) findViewById(R.id.spinnerSchedules);
-        spinnerSchedules.setVisibility(View.GONE);
+        if (spinnerSchedules != null) {
+            spinnerSchedules.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -155,7 +161,9 @@ public class CreateGameActivity extends AppCompatActivity implements
 
     private void initButtonSubmit() {
         btnCreate = (AppCompatButton) findViewById(R.id.createButton);
-        btnCreate.setEnabled(false);
+        if (btnCreate != null) {
+            btnCreate.setEnabled(false);
+        }
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,11 +294,10 @@ public class CreateGameActivity extends AppCompatActivity implements
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (location != null) {
                 latLngOrigin = new LatLng(location.getLatitude(), location.getLongitude());
+            } else {
+                Toast.makeText(CreateGameActivity.this, "Não foi possível encontrar sua localização, ative-a e tente novamente", Toast.LENGTH_LONG).show();
             }
-//            } else {
-//                Toast.makeText(CreateGameActivity.this, "Não foi possível encontrar sua localização, ative-a e tente novamente", Toast.LENGTH_LONG).show();
-//            }
-            latLngOrigin = new LatLng(-29.4529020,-49.9212320);
+            //latLngOrigin = new LatLng(-29.4529020,-49.9212320);
         }
     }
 
