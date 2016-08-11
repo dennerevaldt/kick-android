@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -89,6 +91,7 @@ public class ConfirmAccountActivity extends AppCompatActivity {
                 Place place = (Place) parent.getItemAtPosition(position);
                 // Set com a descrição do lugar o auto complete
                 autocompleteView.setText(place.getDescription());
+                autocompleteView.clearFocus();
                 // Busca lat e lng pelo id do local escolhido
                 PlaceAPI placeApi = new PlaceAPI();
                 latLng = placeApi.getLatLongLocale(place.getIdPlace());
@@ -107,7 +110,7 @@ public class ConfirmAccountActivity extends AppCompatActivity {
                         String username = editTextUsername.getText().toString();
                         String district = autocompleteView.getText().toString();
 
-                        if (username.equals("")){
+                        if (username.equals("")) {
                             editTextUsername.setError("Campo obrigatório");
                             return;
                         }
@@ -124,8 +127,11 @@ public class ConfirmAccountActivity extends AppCompatActivity {
                             if (position.equals("")) {
                                 editTextPosition.setError("Campo obrigatório");
                                 return;
-                            } else if (district.equals("")){
+                            } else if (district.equals("")) {
                                 autocompleteView.setError("Campo obrigatório");
+                                return;
+                            } else if (latLng == null) {
+                                autocompleteView.setError("Localidade inválida, pesquise e selecione uma válida");
                                 return;
                             }
 
@@ -145,8 +151,11 @@ public class ConfirmAccountActivity extends AppCompatActivity {
                             if (telephone.equals("")) {
                                 editTextTelephone.setError("Campo obrigatório");
                                 return;
-                            } else if (district.equals("")){
+                            } else if (district.equals("")) {
                                 autocompleteView.setError("Campo obrigatório");
+                                return;
+                            } else if (latLng == null) {
+                                autocompleteView.setError("Localidade inválida, pesquise e selecione uma válida");
                                 return;
                             }
 
@@ -160,15 +169,35 @@ public class ConfirmAccountActivity extends AppCompatActivity {
                             mRegisterEnterpriseTask.execute(parameters);
 
                         }
+
                     } else {
                         Toast.makeText(ConfirmAccountActivity.this, "Sem conexão", Toast.LENGTH_LONG).show();
                     }
-
                 }
             });
         }
 
         initTypes();
+        checkLat();
+    }
+
+    private void checkLat() {
+        autocompleteView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                latLng = null;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void initTypes(){

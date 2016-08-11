@@ -37,7 +37,6 @@ import java.util.List;
 
 import br.unisinos.kickoffapp.R;
 import br.unisinos.kickoffapp.adapters.EnterprisesListAdapter;
-import br.unisinos.kickoffapp.adapters.SchedulesListAdapter;
 import br.unisinos.kickoffapp.adapters.SchedulesListSpinnerAdapter;
 import br.unisinos.kickoffapp.asynk.enterpriseTask.GetListEnterpriseProximityTask;
 import br.unisinos.kickoffapp.asynk.gameTask.RegisterGameTask;
@@ -194,25 +193,28 @@ public class CreateGameActivity extends AppCompatActivity implements
                 public void onFinished(List<Enterprise> result) {
                     enterprises = result;
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(CreateGameActivity.this).create();
-                    LayoutInflater inflater = getLayoutInflater();
-                    View convertView = inflater.inflate(R.layout.dialog_list_enterprise, null);
-                    alertDialog.setView(convertView);
-                    alertDialog.setTitle("Escolha uma empresa próxima de você");
-                    ListView lvEnterprises = (ListView) convertView.findViewById(R.id.listViewEnterprises);
-                    EnterprisesListAdapter enterprisesListAdapter = new EnterprisesListAdapter(CreateGameActivity.this, enterprises);
-                    lvEnterprises.setAdapter(enterprisesListAdapter);
-                    alertDialog.show();
+                    if (enterprises != null){
+                        final AlertDialog alertDialog = new AlertDialog.Builder(CreateGameActivity.this).create();
+                        LayoutInflater inflater = getLayoutInflater();
+                        View convertView = inflater.inflate(R.layout.dialog_list_enterprise, null);
+                        alertDialog.setView(convertView);
+                        alertDialog.setTitle("Escolha uma empresa próxima de você");
+                        ListView lvEnterprises = (ListView) convertView.findViewById(R.id.listViewEnterprises);
+                        enterprises = enterprises == null ? new ArrayList<Enterprise>() : enterprises;
+                        EnterprisesListAdapter enterprisesListAdapter = new EnterprisesListAdapter(CreateGameActivity.this, enterprises);
+                        lvEnterprises.setAdapter(enterprisesListAdapter);
+                        alertDialog.show();
 
-                    lvEnterprises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            enterpriseSelected = enterprises.get(position);
-                            editTextEnterprise.setText(enterpriseSelected.getFullName());
-                            alertDialog.dismiss();
-                            getListSchedules(String.valueOf(enterpriseSelected.getIdEnterprise()));
-                        }
-                    });
+                        lvEnterprises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                enterpriseSelected = enterprises.get(position);
+                                editTextEnterprise.setText(enterpriseSelected.getFullName());
+                                alertDialog.dismiss();
+                                getListSchedules(String.valueOf(enterpriseSelected.getIdEnterprise()));
+                            }
+                        });
+                    }
                 }
             };
 
@@ -297,7 +299,6 @@ public class CreateGameActivity extends AppCompatActivity implements
             } else {
                 Toast.makeText(CreateGameActivity.this, "Não foi possível encontrar sua localização, ative-a e tente novamente", Toast.LENGTH_LONG).show();
             }
-            //latLngOrigin = new LatLng(-29.4529020,-49.9212320);
         }
     }
 

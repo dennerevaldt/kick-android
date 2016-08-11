@@ -150,9 +150,13 @@ public class CreateScheduleActivity extends AppCompatActivity {
         } catch (ExecutionException | InterruptedException ei) {
             ei.printStackTrace();
         }
-
-        dataAdapterTypes = new CourtsListSpinnerAdapter(this, courtListReturn);
-        spinnerCategories.setAdapter(dataAdapterTypes);
+        if (courtListReturn.size() != 0){
+            dataAdapterTypes = new CourtsListSpinnerAdapter(this, courtListReturn);
+            spinnerCategories.setAdapter(dataAdapterTypes);
+        } else {
+            finish();
+            Toast.makeText(getApplicationContext(), "Nenhuma quadra cadastrada, registre uma e tente novamente", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initButtonSubmit() {

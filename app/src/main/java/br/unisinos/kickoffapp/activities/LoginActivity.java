@@ -99,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                         String[] parameters = {sb.toString()};
 
                         if (ConnectionUtil.hasConnection(LoginActivity.this)) {
+                            exception = null;
                             loginRequestHttp = new LoginRequestHttp();
                             loginRequestHttp.execute(parameters);
                         } else {
@@ -150,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     String[] parameters = {sb.toString()};
 
+                                    exception = null;
                                     loginRequestFacebookHttp = new LoginRequestFacebookHttp();
                                     loginRequestFacebookHttp.execute(parameters);
 

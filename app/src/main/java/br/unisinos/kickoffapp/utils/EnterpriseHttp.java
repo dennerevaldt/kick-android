@@ -30,7 +30,6 @@ public class EnterpriseHttp {
     public Enterprise createEnterprise (String parameters) throws Exception {
         HttpURLConnection httpURLConnection = ConnectionUtil.connect(ENTERPRISE_URL_JSON, "POST", true, true, null);
 
-        //Enterprise enterpriseLogin = UserPreferences.getUserEnteprise(context);
         OutputStream os = httpURLConnection.getOutputStream();
         os.write(parameters.getBytes());
         os.flush();
@@ -50,14 +49,22 @@ public class EnterpriseHttp {
 
     public static List<Enterprise> getAllEnterprisesProximity(Context context, String parameters) throws Exception {
         String token = UserPreferences.getToken(context);
-        HttpURLConnection httpURLConnection = ConnectionUtil.connect(ENTERPRISE_URL_JSON + "/proximity", "POST", true, true, token);
+        HttpURLConnection httpURLConnection;
+        int responseServer;
 
-        OutputStream os = httpURLConnection.getOutputStream();
-        os.write(parameters.getBytes());
-        os.flush();
-        os.close();
+        try {
+            httpURLConnection = ConnectionUtil.connect(ENTERPRISE_URL_JSON + "/proximity", "POST", true, true, token);
 
-        int responseServer = httpURLConnection.getResponseCode();
+            OutputStream os = httpURLConnection.getOutputStream();
+            os.write(parameters.getBytes());
+            os.flush();
+            os.close();
+
+            responseServer = httpURLConnection.getResponseCode();
+        } catch (Exception e) {
+            throw new Exception("Falha na conexão com a API");
+        }
+
         if (responseServer == HttpURLConnection.HTTP_OK) {
             InputStream inputStream = httpURLConnection.getInputStream();
             JSONArray jsonAllEnterprisesArray = new JSONArray(ConnectionUtil.bytesForString(inputStream));

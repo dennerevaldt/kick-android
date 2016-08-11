@@ -70,9 +70,16 @@ public class GameHttp {
      */
     public static List<Game> getAllGames(Context context) throws Exception {
         String token = UserPreferences.getToken(context);
-        HttpURLConnection httpURLConnection = ConnectionUtil.connect(GAME_URL_JSON, "GET", true, false, token);
+        HttpURLConnection httpURLConnection;
+        int responseServer;
 
-        int responseServer = httpURLConnection.getResponseCode();
+        try {
+            httpURLConnection = ConnectionUtil.connect(GAME_URL_JSON, "GET", true, false, token);
+            responseServer = httpURLConnection.getResponseCode();
+        } catch (Exception e){
+            throw new Exception("Falha na conexão com a API");
+        }
+
         if (responseServer == HttpURLConnection.HTTP_OK) {
             InputStream inputStream = httpURLConnection.getInputStream();
             JSONArray jsonAllGamesArray = new JSONArray(ConnectionUtil.bytesForString(inputStream));

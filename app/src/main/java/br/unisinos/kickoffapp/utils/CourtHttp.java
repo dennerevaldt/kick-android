@@ -111,9 +111,16 @@ public class CourtHttp {
      */
     public static List<Court> getAllCourts(Context context) throws Exception {
         String token = UserPreferences.getToken(context);
-        HttpURLConnection httpURLConnection = ConnectionUtil.connect(COURT_URL_JSON, "GET", true, false, token);
+        HttpURLConnection httpURLConnection = null;
+        int responseServer = 0;
+        try {
+            httpURLConnection = ConnectionUtil.connect(COURT_URL_JSON, "GET", true, false, token);
+            responseServer = httpURLConnection.getResponseCode();
 
-        int responseServer = httpURLConnection.getResponseCode();
+        } catch (Exception e) {
+            throw new Exception("Falha na conexão com a API");
+        }
+
         if (responseServer == HttpURLConnection.HTTP_OK) {
             InputStream inputStream = httpURLConnection.getInputStream();
             JSONArray jsonAllCourtsArray = new JSONArray(ConnectionUtil.bytesForString(inputStream));

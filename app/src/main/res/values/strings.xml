@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">kickoffapp</string>
+    <string name="app_name">Kick Off</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Usuário</string>

@@ -97,16 +97,23 @@ public class ScheduleHttp {
      */
     public static List<Schedule> getAllSchedules(Context context) throws Exception {
         String token = UserPreferences.getToken(context);
-        HttpURLConnection httpURLConnection = ConnectionUtil.connect(SCHEDULE_URL_JSON, "GET", true, false, token);
+        HttpURLConnection httpURLConnection = null;
+        int responseServer = 0;
 
-        int responseServer = httpURLConnection.getResponseCode();
+        try {
+            httpURLConnection = ConnectionUtil.connect(SCHEDULE_URL_JSON, "GET", true, false, token);
+            responseServer = httpURLConnection.getResponseCode();
+        } catch (Exception e) {
+            throw new Exception("Falha na conexão com a API");
+        }
+
         if (responseServer == HttpURLConnection.HTTP_OK) {
             InputStream inputStream = httpURLConnection.getInputStream();
             JSONArray jsonAllSchedulesArray = new JSONArray(ConnectionUtil.bytesForString(inputStream));
             List<Schedule> schedules = readScheduleArray(jsonAllSchedulesArray);
             return schedules;
         }
-        return new ArrayList<>();
+        return null;
     }
 
     public static List<Schedule> getAllByIdEnterprise(Context context, String idEnterprise) throws Exception {

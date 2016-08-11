@@ -102,6 +102,7 @@ public class EnterpriseScheduleFragment extends Fragment {
         scheduleList = new ArrayList<>();
         try {
             scheduleList = getScheduleListTask.execute().get();
+            scheduleList = scheduleList == null ? new ArrayList<Schedule>() : scheduleList;
             setListViewSchedules(scheduleList);
             swipeContainer.setRefreshing(false);
         } catch (ExecutionException | InterruptedException ei) {

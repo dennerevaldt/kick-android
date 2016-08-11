@@ -94,6 +94,7 @@ public class PlayerGameFragment extends Fragment {
         try {
             gameListReturn = new ArrayList<>();
             gameListReturn = getListGamesTask.execute().get();
+            gameListReturn = gameListReturn == null ? new ArrayList<Game>() : gameListReturn;
             setListCourts(gameListReturn);
         } catch (ExecutionException | InterruptedException ei) {
             setListCourts(gameListReturn);

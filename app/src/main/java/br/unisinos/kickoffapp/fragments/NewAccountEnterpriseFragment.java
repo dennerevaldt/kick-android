@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -41,6 +42,7 @@ public class NewAccountEnterpriseFragment extends Fragment {
     private EditText editTextTelephone;
     private AutoCompleteTextView autocompleteView;
     private LatLng latLng;
+    private TextView textViewGoLogin;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +56,14 @@ public class NewAccountEnterpriseFragment extends Fragment {
         editTextUsername = (EditText) view.findViewById(R.id.username);
         editTextPassword = (EditText) view.findViewById(R.id.password);
         editTextEmail = (EditText) view.findViewById(R.id.email);
+        textViewGoLogin = (TextView) view.findViewById(R.id.textViewGoLogin);
+
+        textViewGoLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
 
         editTextTelephone = (EditText) view.findViewById(R.id.telephone);
         editTextTelephone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("BR"));

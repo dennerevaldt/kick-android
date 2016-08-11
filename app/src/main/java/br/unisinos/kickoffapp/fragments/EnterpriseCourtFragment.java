@@ -98,6 +98,7 @@ public class EnterpriseCourtFragment extends Fragment {
         List<Court> courtListReturn = null;
         try {
             courtListReturn = getCategoriesHttp.execute().get();
+            courtListReturn = courtListReturn == null ? new ArrayList<Court>() : courtListReturn;
             setListCourts(courtListReturn);
         } catch (ExecutionException | InterruptedException ei) {
             setListCourts(courtListReturn);
