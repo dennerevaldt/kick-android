@@ -299,6 +299,7 @@ public class CreateGameActivity extends AppCompatActivity implements
             } else {
                 Toast.makeText(CreateGameActivity.this, "Não foi possível encontrar sua localização, ative-a e tente novamente", Toast.LENGTH_LONG).show();
             }
+            //latLngOrigin = new LatLng(-29.4753, -49.9849);
         }
     }
 
